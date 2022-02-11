@@ -18,7 +18,12 @@ type dungeon struct {
 }
 
 func main() {
-	d := newDungeon("case.txt")
+	if len(os.Args) < 2 {
+		fmt.Println("error please input case name")
+		os.Exit(1)
+	}
+
+	d := newDungeon(os.Args[1])
 	d.buildMatrix()
 	d.findPossibleTreasureLocation()
 }
@@ -84,9 +89,13 @@ func (d *dungeon) findPossibleTreasureLocation() {
 
 	// rules: up > right > down
 	for i := d.startX - 1; i > 0; i-- {
+		if d.matrix[i][d.startY] == "#" {
+			break
+		}
+
 		for j := d.startY + 1; j < d.col; j++ {
 			if d.matrix[i][j] == "#" {
-				continue
+				break
 			}
 
 			for k := i + 1; k < d.row; k++ {
